@@ -78,4 +78,39 @@
   <h1>EazyScripts</h1>
   <p>Thank you for your support!</p>
 
-  <div cla
+  <div class="progress" id="progressText">
+    Step 1: Subscribe to unlock<br>
+    Progress: 0/1
+  </div>
+
+  <button onclick="subscribe()">
+    Go to Channel & Subscribe
+  </button>
+
+  <div class="locked" id="lockedText">
+    🔒 Script link locked
+  </div>
+
+  <div class="unlocked" id="unlockedContent">
+    ✅ Script unlocked!<br><br>
+    <a href="PASTE_SCRIPT_LINK_HERE" target="_blank">
+      Click here to get the script
+    </a>
+  </div>
+</div>
+
+<script>
+  function subscribe() {
+    // 🔴 CHANGE THIS to your YouTube channel
+    window.open("https://www.youtube.com/@EazyScripts?sub_confirmation=1", "_blank");
+
+    document.getElementById("progressText").innerHTML =
+      "Step complete ✔<br>Progress: 1/1";
+
+    document.getElementById("lockedText").style.display = "none";
+    document.getElementById("unlockedContent").style.display = "block";
+  }
+</script>
+
+</body>
+</html>
