@@ -3,114 +3,89 @@
 <head>
 <meta charset="UTF-8">
 <title>EazyScripts</title>
-
-<style>
-  body {
-    margin: 0;
-    height: 100vh;
-    background: linear-gradient(135deg, #6a00ff, #ff3fd1);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: Arial, sans-serif;
-    color: white;
-  }
-
-  .card {
-    background: rgba(0,0,0,0.35);
-    backdrop-filter: blur(10px);
-    border-radius: 16px;
-    padding: 30px;
-    width: 360px;
-    text-align: center;
-    box-shadow: 0 0 30px rgba(0,0,0,0.4);
-  }
-
-  h1 {
-    margin-top: 0;
-    color: #ff7cff;
-    text-shadow: 0 0 10px #ff7cff;
-  }
-
-  .progress {
-    margin: 15px 0;
-    font-size: 14px;
-    opacity: 0.85;
-  }
-
-  button {
-    background: #ff3fd1;
-    border: none;
-    color: white;
-    padding: 12px 20px;
-    border-radius: 10px;
-    font-size: 15px;
-    cursor: pointer;
-    margin-top: 10px;
-    box-shadow: 0 0 15px rgba(255,63,209,0.6);
-  }
-
-  button:hover {
-    opacity: 0.9;
-  }
-
-  .locked {
-    margin-top: 20px;
-    opacity: 0.6;
-  }
-
-  .unlocked {
-    display: none;
-    margin-top: 20px;
-  }
-
-  a {
-    color: #00ffcc;
-    font-weight: bold;
-    text-decoration: none;
-  }
-</style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="style.css">
 </head>
 
 <body>
+<div class="container">
+    <div class="card">
 
-<div class="card">
-  <h1>EazyScripts</h1>
-  <p>Thank you for your support!</p>
+        <h1 class="title">EazyScripts</h1>
 
-  <div class="progress" id="progressText">
-    Step 1: Subscribe to unlock<br>
-    Progress: 0/1
-  </div>
+        <div class="inner-card">
+            <h2>EazyScripts</h2>
+            <p class="subtitle">Thank You For Your Support!</p>
+        </div>
 
-  <button onclick="subscribe()">
-    Go to Channel & Subscribe
-  </button>
+        <p class="step" id="stepText">
+            Step 1: Click the button below to visit our YouTube channel and unlock your EazyScripts content.
+        </p>
 
-  <div class="locked" id="lockedText">
-    🔒 Script link locked
-  </div>
+        <p class="progress-text" id="progressText">Progress: 0/1</p>
 
-  <div class="unlocked" id="unlockedContent">
-    ✅ Script unlocked!<br><br>
-    <a href="PASTE_SCRIPT_LINK_HERE" target="_blank">
-      Click here to get the script
-    </a>
-  </div>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+
+        <button class="btn" id="mainBtn" onclick="startProcess()">
+            Go to Channel & Subscribe
+        </button>
+
+        <div class="unlock-box" id="unlockBox">
+            <p class="unlocked">✅ Script Unlocked!</p>
+            <button class="btn" onclick="getScript()">Get Script</button>
+        </div>
+
+    </div>
 </div>
 
 <script>
-  function subscribe() {
-    // 🔴 CHANGE THIS to your YouTube channel
-    window.open("https://www.youtube.com/@EazyScripts?sub_confirmation=1", "_blank");
+const YOUTUBE_LINK = "https://www.youtube.com/@EazyScripts?sub_confirmation=1";
+const SCRIPT_LINK = "https://your-script-link-here.com";
 
-    document.getElementById("progressText").innerHTML =
-      "Step complete ✔<br>Progress: 1/1";
+function startProcess() {
+    localStorage.setItem("subClicked", "true");
+    window.open(YOUTUBE_LINK, "_blank");
+    mainBtn.innerText = "Waiting...";
+}
 
-    document.getElementById("lockedText").style.display = "none";
-    document.getElementById("unlockedContent").style.display = "block";
-  }
+window.onload = () => {
+    if (localStorage.getItem("subClicked") === "true") {
+        runProgress();
+    }
+};
+
+function runProgress() {
+    let progress = 0;
+    const fill = document.getElementById("progressFill");
+    const text = document.getElementById("progressText");
+    const btn = document.getElementById("mainBtn");
+
+    btn.innerText = "Completed";
+    btn.disabled = true;
+    btn.classList.add("completed");
+
+    const interval = setInterval(() => {
+        progress++;
+        fill.style.width = progress + "%";
+
+        if (progress >= 100) {
+            clearInterval(interval);
+            text.innerText = "Progress: 1/1";
+            document.getElementById("unlockBox").style.display = "block";
+
+            // AUTO REDIRECT (optional – comment this if you want manual click)
+            setTimeout(() => {
+                window.location.href = SCRIPT_LINK;
+            }, 1500);
+        }
+    }, 15);
+}
+
+function getScript() {
+    window.location.href = SCRIPT_LINK;
+}
 </script>
-
 </body>
 </html>
