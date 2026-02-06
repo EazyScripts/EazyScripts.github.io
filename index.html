@@ -45,6 +45,8 @@ const YOUTUBE_LINK = "https://www.youtube.com/@EazyScripts?sub_confirmation=1";
 const SCRIPT_LINK = "https://your-script-link-here.com";
 
 function startProcess() {
+    if (localStorage.getItem("completed") === "true") return;
+
     localStorage.setItem("subClicked", "true");
     window.open(YOUTUBE_LINK, "_blank");
 
@@ -53,13 +55,15 @@ function startProcess() {
 }
 
 window.onload = () => {
-    if (localStorage.getItem("subClicked") === "true") {
-        runProgress();
+    // If already completed before, show completed state ONLY
+    if (localStorage.getItem("completed") === "true") {
+        setCompletedUI();
     }
 };
 
 function runProgress() {
     let progress = 0;
+
     const fill = document.getElementById("progressFill");
     const text = document.getElementById("progressText");
     const btn = document.getElementById("mainBtn");
@@ -69,13 +73,17 @@ function runProgress() {
     btn.classList.add("completed");
 
     const interval = setInterval(() => {
-        progress += 1;
+        progress++;
         fill.style.width = progress + "%";
 
         if (progress >= 100) {
             clearInterval(interval);
+
             text.innerText = "Progress: 1/1";
             document.getElementById("unlockBox").style.display = "block";
+
+            localStorage.setItem("completed", "true");
+            localStorage.removeItem("subClicked");
 
             setTimeout(() => {
                 window.location.href = SCRIPT_LINK;
@@ -83,6 +91,29 @@ function runProgress() {
         }
     }, 20);
 }
+
+function setCompletedUI() {
+    document.getElementById("progressFill").style.width = "100%";
+    document.getElementById("progressText").innerText = "Progress: 1/1";
+
+    const btn = document.getElementById("mainBtn");
+    btn.innerText = "Completed";
+    btn.disabled = true;
+    btn.classList.add("completed");
+
+    document.getElementById("unlockBox").style.display = "block";
+}
+
+// 👇 THIS runs animation ONLY after clicking button
+document.addEventListener("visibilitychange", () => {
+    if (
+        document.visibilityState === "visible" &&
+        localStorage.getItem("subClicked") === "true" &&
+        localStorage.getItem("completed") !== "true"
+    ) {
+        runProgress();
+    }
+});
 
 function getScript() {
     window.location.href = SCRIPT_LINK;
