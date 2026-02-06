@@ -47,7 +47,9 @@ const SCRIPT_LINK = "https://your-script-link-here.com";
 function startProcess() {
     localStorage.setItem("subClicked", "true");
     window.open(YOUTUBE_LINK, "_blank");
-    mainBtn.innerText = "Waiting...";
+
+    const btn = document.getElementById("mainBtn");
+    btn.innerText = "Waiting...";
 }
 
 window.onload = () => {
@@ -67,7 +69,7 @@ function runProgress() {
     btn.classList.add("completed");
 
     const interval = setInterval(() => {
-        progress++;
+        progress += 1;
         fill.style.width = progress + "%";
 
         if (progress >= 100) {
@@ -75,17 +77,14 @@ function runProgress() {
             text.innerText = "Progress: 1/1";
             document.getElementById("unlockBox").style.display = "block";
 
-            // AUTO REDIRECT (optional – comment this if you want manual click)
             setTimeout(() => {
                 window.location.href = SCRIPT_LINK;
             }, 1500);
         }
-    }, 15);
+    }, 20);
 }
 
 function getScript() {
     window.location.href = SCRIPT_LINK;
 }
 </script>
-</body>
-</html>
